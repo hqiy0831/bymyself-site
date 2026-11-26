@@ -29,7 +29,11 @@
       d.classList.add("js");
       var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
       if (!still) d.classList.add("motion");
-      if (!seen && !still) d.classList.add("intro");
+      if (!still) d.classList.add("intro");
+      if (!still && seen) d.classList.add("intro-quick");
+      // Always start a full load at the top so the opening plays (keep #anchor links working).
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      if (!location.hash) window.scrollTo(0, 0);
     })();
   </script>
   <script src="vendor/gsap.min.js" defer></script>

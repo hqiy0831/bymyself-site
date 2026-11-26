@@ -184,6 +184,13 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-event
 .loader__dot--present { left: 110px; width: 26px; height: 26px; background: var(--present); animation-delay: 0.7s; }
 .loader__dot--future { left: 200px; width: 14px; height: 14px; border: 2.5px solid var(--future); animation-delay: 0.95s; }
 .loader__word { font-family: var(--font-serif); font-size: 22px; letter-spacing: 0.02em; opacity: 0; animation: fade-up 0.6s var(--ease) 1.15s forwards; }
+/* repeat visits in the same session: same opening, about twice as fast */
+.intro.intro-quick .loader { animation-duration: 0.75s; animation-delay: 0.8s; }
+.intro-quick .loader__line { animation-duration: 0.45s; animation-delay: 0.05s; }
+.intro-quick .loader__dot--past { animation-delay: 0.2s; }
+.intro-quick .loader__dot--present { animation-delay: 0.32s; }
+.intro-quick .loader__dot--future { animation-delay: 0.44s; }
+.intro-quick .loader__word { animation-delay: 0.45s; }
 @keyframes draw { to { transform: scaleX(1); } }
 @keyframes pop { to { transform: translate(-50%, -50%) scale(1); } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
@@ -276,7 +283,9 @@ body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-event
 .sc-titlebar__ctl .cls::before, .sc-titlebar__ctl .cls::after { width: 12px; height: 1px; transform: translate(-50%, -50%) rotate(45deg); }
 .sc-titlebar__ctl .cls::after { transform: translate(-50%, -50%) rotate(-45deg); }
 .sc-screens { position: relative; aspect-ratio: 16 / 10; background: var(--paper-2); }
-.sc-shot { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 0.6s var(--ease); }
+.sc-shot { position: absolute; inset: 0; margin: 0; opacity: 0; overflow: hidden; transition: opacity 0.6s var(--ease); }
+.gsap-ok .sc-shot { transition: none; }
+.gsap-ok .sc-shot .sc-img { will-change: transform; }
 .sc-shot[hidden] { display: block; visibility: hidden; }
 .sc-shot.is-on { opacity: 1; visibility: visible; }
 .sc-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }

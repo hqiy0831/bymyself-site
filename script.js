@@ -61,9 +61,10 @@
 
   /* ================= Intro timing ================= */
   const intro = root.classList.contains("intro");
+  const quick = root.classList.contains("intro-quick");
   if (intro) store.set("bm-intro", "1", sessionStorage);
-  const introDelay = intro ? 2.05 : 0.1;
-  if (intro) setTimeout(() => root.classList.remove("intro"), 2900);
+  const introDelay = intro ? (quick ? 0.95 : 2.05) : 0.1;
+  if (intro) setTimeout(() => root.classList.remove("intro", "intro-quick"), quick ? 1700 : 2900);
 
   /* ================= Countdown / mood / year ================= */
   const cd = document.getElementById("countdown");
@@ -99,11 +100,43 @@
     const DUR = 6000;
     showcase.style.setProperty("--sc-dur", `${DUR}ms`);
     let cur = 0, timer = null, inView = false, hovering = false, userPicked = false;
-    const show = (i, focus) => {
-      cur = (i + tabs.length) % tabs.length;
+    const swap = (prev, dir) => {
+      const inS = shots[cur], outS = shots[prev];
+      if (!useGsap || prev === cur) {
+        shots.forEach((s, k) => { const on = k === cur; s.classList.toggle("is-on", on); s.hidden = !on; });
+        return;
+      }
+      const G2 = window.gsap;
+      shots.forEach((s, k) => { if (k !== cur && k !== prev) { G2.killTweensOf([s, ...s.querySelectorAll("img")]); s.classList.remove("is-on"); s.hidden = true; G2.set(s, { clearProps: "all" }); } });
+      G2.killTweensOf([inS, outS, ...inS.querySelectorAll("img"), ...outS.querySelectorAll("img")]);
+      inS.hidden = false;
+      inS.classList.add("is-on");
+      G2.set(inS, { zIndex: 2 });
+      G2.set(outS, { zIndex: 1 });
+      // incoming screen wipes in from the side you are heading to, settling from a slight zoom
+      G2.fromTo(inS, { clipPath: dir > 0 ? "inset(0% 0% 0% 100%)" : "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: 1.05, ease: "expo.inOut", clearProps: "clipPath,zIndex" });
+      G2.fromTo(inS.querySelectorAll("img"), { scale: 1.08, xPercent: dir * 6 },
+        { scale: 1, xPercent: 0, duration: 1.4, ease: "expo.out", clearProps: "transform" });
+      // outgoing screen drifts the other way and dims
+      G2.to(outS.querySelectorAll("img"), {
+        xPercent: -dir * 8, scale: 0.97, opacity: 0.35, duration: 1.05, ease: "expo.inOut",
+        onComplete: () => {
+          if (shots[cur] === outS) return;
+          outS.classList.remove("is-on"); outS.hidden = true;
+          G2.set([outS, ...outS.querySelectorAll("img")], { clearProps: "all" });
+        },
+      });
+    };
+    const show = (i, focus, forcedDir) => {
+      const prev = cur;
+      const target = (i + tabs.length) % tabs.length;
+      const dir = forcedDir || (target >= prev ? 1 : -1);
+      cur = target;
       tabs.forEach((t, k) => { const on = k === cur; t.classList.toggle("is-on", on); t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
-      shots.forEach((s, k) => { const on = k === cur; s.classList.toggle("is-on", on); s.hidden = !on; });
+      swap(prev, dir);
       caps.forEach((c, k) => c.classList.toggle("is-on", k === cur));
+      if (useGsap && prev !== cur) window.gsap.fromTo(caps[cur], { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, delay: 0.25, ease: "expo.out", clearProps: "transform,opacity" });
       // restart the progress bar animation on the active tab
       const bar = tabs[cur].querySelector(".sc-tab__bar");
       bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
@@ -117,13 +150,13 @@
       stop();
       if (reduce || userPicked || !inView) return;
       showcase.classList.add("is-playing");
-      timer = setInterval(() => { if (!hovering) show(cur + 1); }, DUR);
+      timer = setInterval(() => { if (!hovering) show(cur + 1, false, 1); }, DUR);
     };
     tabs.forEach((t, i) => {
       t.addEventListener("click", () => { userPicked = true; stop(); show(i); });
       t.addEventListener("keydown", (e) => {
         const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
-        if (k) { e.preventDefault(); userPicked = true; stop(); show(cur + k, true); }
+        if (k) { e.preventDefault(); userPicked = true; stop(); show(cur + k, true, k); }
         if (e.key === "Home") { e.preventDefault(); userPicked = true; stop(); show(0, true); }
         if (e.key === "End") { e.preventDefault(); userPicked = true; stop(); show(tabs.length - 1, true); }
       });
@@ -195,7 +228,7 @@
 
   /* ================= Fallback path (no GSAP / reduced motion) ================= */
   if (!useGsap) {
-    if (intro) setTimeout(() => root.classList.add("is-ready"), 2100);
+    if (intro) setTimeout(() => root.classList.add("is-ready"), quick ? 1000 : 2100);
     else requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add("is-ready")));
     const items = document.querySelectorAll(".reveal");
     if ("IntersectionObserver" in window && !reduce) {
@@ -213,6 +246,8 @@
      GSAP path
      ===================================================================== */
   G.registerPlugin(ST);
+  // Sections animate in, and animate in again after you scroll back up past them.
+  ST.defaults({ toggleActions: "play none none reverse" });
   const EXPO = "expo.out";
 
   /* ---------- Smooth scroll ---------- */
@@ -222,7 +257,7 @@
     lenis.on("scroll", ST.update);
     G.ticker.add((t) => lenis.raf(t * 1000));
     G.ticker.lagSmoothing(0);
-    if (intro) { lenis.stop(); setTimeout(() => lenis.start(), 2300); }
+    if (intro) { lenis.stop(); setTimeout(() => lenis.start(), quick ? 1100 : 2300); }
     document.querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
       const id = a.getAttribute("href");
       const t = id === "#top" ? 0 : document.querySelector(id);
