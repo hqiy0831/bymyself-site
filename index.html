@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>By Myself · 只属于你的人生日记</title>
+  <meta name="description" content="By Myself 是一本保存在你自己电脑上的私人日记。回顾过去、记录现在、规划未来。Windows 10 / 11，免费使用。">
+  <meta name="theme-color" content="#f7f5f1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#111113" media="(prefers-color-scheme: dark)">
+  <link rel="canonical" href="https://bymyself.eu.cc/">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icon-256.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bymyself.eu.cc/">
+  <meta property="og:title" content="By Myself · 只属于你的人生日记">
+  <meta property="og:description" content="Remember the Past. Record the Present. Plan the Future.">
+  <meta property="og:image" content="https://bymyself.eu.cc/assets/icon-256.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Lucide icons (ISC) as an inline sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+      <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+      <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+      <symbol id="i-drive" viewBox="0 0 24 24"><path d="M22 12H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M6 16h.01"/><path d="M10 16h.01"/></symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 24 24"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></symbol>
+      <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+      <symbol id="i-keyboard" viewBox="0 0 24 24"><path d="M10 8h.01"/><path d="M12 12h.01"/><path d="M14 8h.01"/><path d="M16 12h.01"/><path d="M18 8h.01"/><path d="M6 8h.01"/><path d="M7 16h10"/><path d="M8 12h.01"/><rect width="20" height="16" x="2" y="4" rx="2"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#main">跳到正文</a>
+
+  <header class="nav" id="top">
+    <div class="nav__inner">
+      <a class="brand" href="#top" aria-label="By Myself 首页">
+        <img src="assets/icon.svg" alt="" width="28" height="28">
+        <span>By Myself</span>
+      </a>
+      <nav aria-label="主导航">
+        <ul class="nav__links">
+          <li><a href="#past">过去</a></li>
+          <li><a href="#present">现在</a></li>
+          <li><a href="#future">未来</a></li>
+          <li><a href="#privacy">隐私</a></li>
+          <li><a href="#faq">常见问题</a></li>
+        </ul>
+      </nav>
+      <div class="nav__actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="切换深浅色">
+          <svg class="icon icon--sun"><use href="#i-sun"/></svg>
+          <svg class="icon icon--moon"><use href="#i-moon"/></svg>
+        </button>
+        <a class="btn btn--primary btn--sm" href="#download">下载</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero">
+      <div class="aura" aria-hidden="true">
+        <span class="aura__blob aura__blob--past"></span>
+        <span class="aura__blob aura__blob--present"></span>
+        <span class="aura__blob aura__blob--future"></span>
+      </div>
+
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow">Windows 私人日记 · v0.2.0</p>
+          <h1 class="display">
+            回顾过去，<br>记录现在，<br><span class="grad">规划未来。</span>
+          </h1>
+          <p class="lede">By Myself 是一本保存在你自己电脑上的人生日记。每天一篇，写下心情、瞬间和念头；把回忆排成时间线；再给几年后的自己写一封信，封存到开启日那天。</p>
+          <div class="hero__cta">
+            <a class="btn btn--primary btn--lg" href="#download">
+              <svg class="icon"><use href="#i-download"/></svg>
+              免费下载 Windows 版
+            </a>
+            <a class="btn btn--ghost btn--lg" href="#past">
+              看看它能做什么
+              <svg class="icon"><use href="#i-arrow"/></svg>
+            </a>
+          </div>
+          <ul class="hero__facts">
+            <li><svg class="icon"><use href="#i-drive"/></svg>数据存在本机</li>
+            <li><svg class="icon"><use href="#i-lock"/></svg>无需注册账号</li>
+            <li><svg class="icon"><use href="#i-check"/></svg>免费使用</li>
+          </ul>
+        </div>
+
+        <!-- App window mock -->
+        <div class="mock" aria-hidden="true">
+          <div class="mock__window glass">
+            <div class="mock__bar"><i></i><i></i><i></i></div>
+            <div class="mock__body">
+              <aside class="mock__side">
+                <div class="mock__nav is-past"><span class="dot"></span>过去</div>
+                <div class="mock__nav is-present is-active"><span class="dot"></span>现在</div>
+                <div class="mock__nav is-future"><span class="dot"></span>未来</div>
+                <div class="mock__sep"></div>
+                <div class="mock__nav is-muted">时间线</div>
+                <div class="mock__nav is-muted">回顾</div>
+                <div class="mock__nav is-muted">搜索</div>
+              </aside>
+              <div class="mock__main">
+                <p class="mock__date">11 月 25 日 · 星期三</p>
+                <h3 class="mock__title">今天</h3>
+                <div class="mock__card">
+                  <p class="mock__label">日记</p>
+                  <p class="mock__text">下午去江边走了很久，风很大。想起去年这个时候也在犹豫要不要换工作，现在回头看，那时的担心大多没有发生。</p>
+                </div>
+                <div class="mock__row">
+                  <div class="mock__card mock__card--sm">
+                    <p class="mock__label">此刻心情</p>
+                    <div class="moods">
+                      <span style="--c: var(--mood-1)"></span>
+                      <span style="--c: var(--mood-2)"></span>
+                      <span style="--c: var(--mood-3)"></span>
+                      <span class="is-on" style="--c: var(--mood-4)"></span>
+                      <span style="--c: var(--mood-5)"></span>
+                    </div>
+                  </div>
+                  <div class="mock__card mock__card--sm">
+                    <p class="mock__label">瞬间</p>
+                    <div class="thumbs"><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mock__letter glass">
+            <svg class="icon"><use href="#i-lock"/></svg>
+            <div>
+              <p class="mock__label">写给 2030 年的我</p>
+              <p class="mock__small">封存中 · 2030 年 1 月 1 日开启</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Story line ============ -->
+    <div class="storyline wrap" aria-hidden="true">
+      <span class="storyline__dot storyline__dot--past"></span>
+      <span class="storyline__line"></span>
+      <span class="storyline__dot storyline__dot--present"></span>
+      <span class="storyline__line"></span>
+      <span class="storyline__dot storyline__dot--future"></span>
+    </div>
+
+    <!-- ============ Past ============ -->
+    <section class="chapter chapter--past" id="past" aria-labelledby="past-title">
+      <div class="wrap chapter__grid">
+        <div class="chapter__copy reveal">
+          <p class="chapter__kicker"><span class="chip">01</span>Remember the Past</p>
+          <h2 class="h2" id="past-title">过去，<br>不会被忘记。</h2>
+          <p class="body-lg">补记那些重要的日子：毕业、搬家、第一次远行。所有记录按时间自动排好，翻到任何一年都能找到当时的自己。</p>
+          <ul class="features">
+            <li>
+              <svg class="icon"><use href="#i-history"/></svg>
+              <div><h3>时间线</h3><p>日记、回忆、心情和信件放在同一条时间线上，按年、按月浏览。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-book"/></svg>
+              <div><h3>回顾</h3><p>挑一段日子回看，看看那几周你写了什么、心情怎样。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-search"/></svg>
+              <div><h3>全文搜索</h3><p>中文也能搜。输入一个词，几年前写下的那句话马上出现。</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="visual reveal">
+          <div class="timeline glass">
+            <p class="timeline__year">2026</p>
+            <div class="tl-item"><span class="tl-dot" style="--c: var(--present)"></span><div><p class="tl-date">11 月 25 日</p><p class="tl-text">江边散步，想通了一些事</p></div></div>
+            <div class="tl-item"><span class="tl-dot" style="--c: var(--past)"></span><div><p class="tl-date">9 月 3 日 · 回忆</p><p class="tl-text">搬进新家的第一个晚上</p></div></div>
+            <p class="timeline__year">2025</p>
+            <div class="tl-item"><span class="tl-dot" style="--c: var(--future)"></span><div><p class="tl-date">12 月 31 日 · 信</p><p class="tl-text">写给一年后的自己（已开启）</p></div></div>
+            <div class="tl-item"><span class="tl-dot" style="--c: var(--past)"></span><div><p class="tl-date">6 月 18 日 · 回忆</p><p class="tl-text">毕业典礼，和室友在操场拍照</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Present ============ -->
+    <section class="chapter chapter--present" id="present" aria-labelledby="present-title">
+      <div class="wrap chapter__grid chapter__grid--flip">
+        <div class="chapter__copy reveal">
+          <p class="chapter__kicker"><span class="chip">02</span>Record the Present</p>
+          <h2 class="h2" id="present-title">今天，<br>值得写下来。</h2>
+          <p class="body-lg">每天一篇日记，打开就能写，边写边自动保存。不想写长文的时候，记一个心情、存一张照片、留一句念头也够了。</p>
+          <ul class="features">
+            <li>
+              <svg class="icon"><use href="#i-book"/></svg>
+              <div><h3>每日一篇</h3><p>按你所在的日期归档，出差跨时区也不会把日记记错天。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-smile"/></svg>
+              <div><h3>心情</h3><p>五档心情，一天可以记很多次，回头能看出起伏。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-image"/></svg>
+              <div><h3>瞬间与想法</h3><p>附上照片的小片段，或者一闪而过的想法，随手记下。</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="visual reveal">
+          <div class="mood-card glass">
+            <p class="mock__label">现在感觉怎么样？</p>
+            <div class="mood-scale">
+              <button type="button" class="mood" style="--c: var(--mood-1)" aria-pressed="false"><span></span>很低落</button>
+              <button type="button" class="mood" style="--c: var(--mood-2)" aria-pressed="false"><span></span>有点低</button>
+              <button type="button" class="mood" style="--c: var(--mood-3)" aria-pressed="false"><span></span>平静</button>
+              <button type="button" class="mood" style="--c: var(--mood-4)" aria-pressed="true"><span></span>不错</button>
+              <button type="button" class="mood" style="--c: var(--mood-5)" aria-pressed="false"><span></span>很开心</button>
+            </div>
+            <div class="mood-week" aria-hidden="true">
+              <span style="--h: 40%; --c: var(--mood-2)"></span>
+              <span style="--h: 60%; --c: var(--mood-3)"></span>
+              <span style="--h: 80%; --c: var(--mood-4)"></span>
+              <span style="--h: 55%; --c: var(--mood-3)"></span>
+              <span style="--h: 100%; --c: var(--mood-5)"></span>
+              <span style="--h: 70%; --c: var(--mood-4)"></span>
+              <span style="--h: 80%; --c: var(--mood-4)"></span>
+            </div>
+            <p class="mock__small">这一周的心情</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Future ============ -->
+    <section class="chapter chapter--future" id="future" aria-labelledby="future-title">
+      <div class="wrap chapter__grid">
+        <div class="chapter__copy reveal">
+          <p class="chapter__kicker"><span class="chip">03</span>Plan the Future</p>
+          <h2 class="h2" id="future-title">未来，<br>从一封信开始。</h2>
+          <p class="body-lg">把想做的事拆成一步一步，看着进度往前走。再给未来的自己写一封信，选好开启日后封存，那天之前谁也打不开，包括你自己。</p>
+          <ul class="features">
+            <li>
+              <svg class="icon"><use href="#i-target"/></svg>
+              <div><h3>梦想与目标</h3><p>给每个目标列出步骤，完成一步勾一步。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-mail"/></svg>
+              <div><h3>写给未来的信</h3><p>封存后只显示标题，正文在开启日之前不会出现，搜索也搜不到。</p></div>
+            </li>
+            <li>
+              <svg class="icon"><use href="#i-book"/></svg>
+              <div><h3>回信</h3><p>信开启后，可以写下读完的感想，和当年的自己对话。</p></div>
+            </li>
+          </ul>
+        </div>
+        <div class="visual reveal">
+          <div class="future-stack">
+            <div class="goal glass">
+              <div class="goal__head">
+                <p class="goal__title">一年内跑完半程马拉松</p>
+                <p class="goal__pct">3 / 5</p>
+              </div>
+              <div class="progress"><span style="--p: 60%"></span></div>
+              <ul class="steps">
+                <li class="is-done"><svg class="icon"><use href="#i-check"/></svg>每周跑三次</li>
+                <li class="is-done"><svg class="icon"><use href="#i-check"/></svg>跑完第一个 10 公里</li>
+                <li class="is-done"><svg class="icon"><use href="#i-check"/></svg>报名比赛</li>
+                <li><span class="step-ring"></span>连续跑 15 公里</li>
+              </ul>
+            </div>
+            <div class="letter glass">
+              <div class="letter__seal"><svg class="icon"><use href="#i-lock"/></svg></div>
+              <p class="letter__title">写给 30 岁的我</p>
+              <p class="letter__meta">封存于 2026 年 11 月 25 日</p>
+              <div class="countdown" id="countdown" data-unlock="2030-01-01T00:00:00">
+                <div><strong data-k="d">—</strong><span>天</span></div>
+                <div><strong data-k="h">—</strong><span>时</span></div>
+                <div><strong data-k="m">—</strong><span>分</span></div>
+              </div>
+              <p class="letter__meta">后开启</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Privacy ============ -->
+    <section class="privacy" id="privacy" aria-labelledby="privacy-title">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">隐私</p>
+          <h2 class="h2" id="privacy-title">你的日记，只在你的电脑里。</h2>
+          <p class="body-lg">By Myself 没有服务器替你保管日记。打开就能用，不需要注册，也不会收集你写了什么。</p>
+        </div>
+        <div class="bento">
+          <article class="tile tile--wide glass reveal">
+            <svg class="icon icon--lg"><use href="#i-drive"/></svg>
+            <h3>本地优先</h3>
+            <p>所有日记、照片和信件都存在你电脑上的一个本地数据库里。断网照常使用，数据目录可以自己选，也能随时搬到别的盘。</p>
+          </article>
+          <article class="tile glass reveal">
+            <svg class="icon icon--lg"><use href="#i-archive"/></svg>
+            <h3>一键备份</h3>
+            <p>导出一个 <code>.bymyself</code> 文件，换电脑时导入就能恢复全部内容。</p>
+          </article>
+          <article class="tile glass reveal">
+            <svg class="icon icon--lg"><use href="#i-trash"/></svg>
+            <h3>回收站</h3>
+            <p>删错了也不怕，删除的内容保留 30 天，可随时恢复。</p>
+          </article>
+          <article class="tile tile--wide glass reveal">
+            <svg class="icon icon--lg"><use href="#i-cloud"/></svg>
+            <h3>可选的云同步 <span class="badge">Beta</span></h3>
+            <p>想在多台设备间同步时，再登录开启。首次同步前会先自动备份一份到本机；多设备改了同一条记录，会让你选择保留哪一份，不会静默覆盖。传输过程加密，但云端不是端到端加密，介意的话不开启即可。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Details ============ -->
+    <section class="details" aria-labelledby="details-title">
+      <div class="wrap">
+        <h2 class="h3 reveal" id="details-title">还有一些细节</h2>
+        <ul class="detail-grid">
+          <li class="reveal"><svg class="icon"><use href="#i-moon"/></svg><div><h3>深色与浅色</h3><p>跟随系统，Windows 11 上有原生的 Mica 毛玻璃效果。</p></div></li>
+          <li class="reveal"><svg class="icon"><use href="#i-keyboard"/></svg><div><h3>键盘快捷键</h3><p>常用操作都有快捷键，可在设置里自定义。</p></div></li>
+          <li class="reveal"><svg class="icon"><use href="#i-folder"/></svg><div><h3>安装无需管理员</h3><p>只为当前用户安装，安装位置和数据位置都可以自己选。</p></div></li>
+          <li class="reveal"><svg class="icon"><use href="#i-shield"/></svg><div><h3>自动保存</h3><p>写的时候自动保存，多开几个窗口也不会互相覆盖。</p></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ Download ============ -->
+    <section class="download" id="download" aria-labelledby="download-title">
+      <div class="wrap">
+        <div class="download__card glass reveal">
+          <img class="download__icon" src="assets/icon.svg" alt="" width="88" height="88">
+          <h2 class="h2" id="download-title">开始写下属于你的故事</h2>
+          <p class="body-lg">适用于 Windows 10 / 11（64 位），免费下载。</p>
+          <div class="download__options">
+            <a class="dl glass" href="download/ByMyself_0.2.0_x64-setup.exe" download>
+              <svg class="icon icon--lg"><use href="#i-download"/></svg>
+              <span class="dl__name">安装包</span>
+              <span class="dl__meta">v0.2.0 · 约 7.4 MB · 推荐</span>
+            </a>
+            <a class="dl glass" href="download/ByMyself_0.2.0_x64-portable.exe" download>
+              <svg class="icon icon--lg"><use href="#i-folder"/></svg>
+              <span class="dl__name">便携版</span>
+              <span class="dl__meta">v0.2.0 · 约 10.8 MB · 免安装</span>
+            </a>
+            <div class="dl dl--soon glass" aria-disabled="true">
+              <svg class="icon icon--lg"><use href="#i-phone"/></svg>
+              <span class="dl__name">Android</span>
+              <span class="dl__meta">开发中，敬请期待</span>
+            </div>
+          </div>
+          <p class="note">程序目前没有代码签名，Windows 可能提示“已保护你的电脑”。确认是从本站下载后，点“更多信息 → 仍要运行”即可。便携版需要系统已安装 Microsoft Edge WebView2（Windows 11 自带）。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="faq" id="faq" aria-labelledby="faq-title">
+      <div class="wrap wrap--narrow">
+        <h2 class="h2 reveal" id="faq-title">常见问题</h2>
+        <div class="faq__list">
+          <details class="reveal">
+            <summary>By Myself 收费吗？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>目前免费使用，不需要注册账号。</p>
+          </details>
+          <details class="reveal">
+            <summary>我的日记存在哪里？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>默认存在 <code>%APPDATA%\app.bymyself.desktop</code>。你可以在安装时另选目录，也可以之后在“设置 → 数据与备份 → 更改位置”中迁移。注意本地数据库和导出的备份文件没有加密，请像保管其他私人文件一样保管它们。</p>
+          </details>
+          <details class="reveal">
+            <summary>封存的信真的打不开吗？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>封存后只能看到标题和开启日期，正文、图片和标签在开启日之前都不会显示，搜索也只能搜到标题。封存是单向的，不能改回草稿。</p>
+          </details>
+          <details class="reveal">
+            <summary>换电脑了怎么办？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>在旧电脑上打开“设置 → 数据与备份”，导出 <code>.bymyself</code> 备份文件，在新电脑上导入即可恢复全部内容。开启云同步后也可以直接在新设备上登录同步。</p>
+          </details>
+          <details class="reveal">
+            <summary>卸载会删掉我的日记吗？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>不会。卸载只移除程序本身，日记数据会保留在原来的目录里。</p>
+          </details>
+          <details class="reveal">
+            <summary>有手机版吗？<svg class="icon"><use href="#i-chevron"/></svg></summary>
+            <p>Android 版正在开发中，会通过云同步和电脑版互通。</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <div class="brand">
+        <img src="assets/icon.svg" alt="" width="24" height="24">
+        <span>By Myself</span>
+      </div>
+      <p class="footer__tag">Remember the Past. Record the Present. Plan the Future.</p>
+      <p class="footer__copy">© <span id="year">2026</span> By Myself · bymyself.eu.cc</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
