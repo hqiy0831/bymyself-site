@@ -52,7 +52,7 @@
   --mood-4: #2fa84f;
   --mood-5: #e98a00;
 
-  --grain-opacity: 0.07;
+  --grain-opacity: 0.1;
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 24px 60px -24px rgba(31, 30, 28, 0.25);
 
   --wrap: 1280px;
@@ -81,7 +81,7 @@
   --past-soft: rgba(94, 92, 230, 0.2);
   --present-soft: rgba(48, 209, 88, 0.18);
   --future-soft: rgba(255, 159, 10, 0.18);
-  --grain-opacity: 0.09;
+  --grain-opacity: 0.07;
   --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
 }
 @media (prefers-color-scheme: dark) {
@@ -93,7 +93,7 @@
     --inv-bg: #ece8e0; --inv-ink: #1a1a18; --inv-ink-2: #57544e; --inv-line: rgba(26, 26, 24, 0.16);
     --past-text: #a8a7ff; --present-text: #63da84; --future-text: #ffb54d;
     --past-soft: rgba(94, 92, 230, 0.2); --present-soft: rgba(48, 209, 88, 0.18); --future-soft: rgba(255, 159, 10, 0.18);
-    --grain-opacity: 0.09; --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+    --grain-opacity: 0.07; --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
   }
 }
 
@@ -129,8 +129,9 @@ code {
 
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
 
-.grain { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 90; opacity: var(--grain-opacity); mix-blend-mode: multiply; }
-:root[data-theme="dark"] .grain { mix-blend-mode: screen; }
+/* Paper grain: one static tile on its own compositor layer, no blend mode, no SVG filter, so scrolling never repaints it. */
+body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; background: url("assets/grain.png") repeat; background-size: 160px; opacity: var(--grain-opacity); transform: translateZ(0); }
+:root[data-theme="dark"] body::after { filter: invert(1); }
 
 .skip { position: absolute; left: 16px; top: -60px; z-index: 200; padding: 10px 16px; background: var(--ink); color: var(--paper); border-radius: 6px; }
 .skip:focus { top: 16px; }
@@ -411,12 +412,8 @@ a.dl:hover .dl__go { border-color: var(--paper); }
   font-family: var(--font-serif); font-weight: 600; font-size: clamp(60px, 15.5vw, 236px); line-height: 0.9; letter-spacing: -0.03em;
   user-select: none;
 }
-.wordmark span { display: inline-block; transition: transform 0.6s var(--ease), color 0.4s; }
+.wordmark span { display: inline-block; }
 .wordmark .sp { width: 0.2em; }
-.wordmark span:hover { transform: translateY(-0.12em); }
-.wordmark span:nth-child(3n+1):hover { color: var(--past); }
-.wordmark span:nth-child(3n+2):hover { color: var(--present); }
-.wordmark span:nth-child(3n):hover { color: var(--future); }
 .footer__bottom { display: flex; justify-content: space-between; gap: 16px; padding-top: 20px; border-top: 1px solid var(--inv-line); font-size: 13px; color: var(--inv-ink-2); }
 
 /* ---------- Reveal ---------- */
@@ -501,30 +498,10 @@ html.lenis, html.lenis body { height: auto; }
 /* seal ripple */
 .envelope__ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--future); opacity: 0; pointer-events: none; }
 
-/* custom cursor (fine pointers only) */
-.cursor { position: fixed; left: 0; top: 0; z-index: 120; pointer-events: none; display: none; }
-.cursor__dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--ink); }
-.cursor__ring {
-  position: absolute; left: 0; top: 0; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
-  border: 1px solid var(--ink); opacity: 0.35; transition: width 0.35s var(--ease), height 0.35s var(--ease), margin 0.35s var(--ease), opacity 0.3s, background-color 0.3s;
-}
-.cursor.is-hover .cursor__ring { width: 72px; height: 72px; margin: -36px 0 0 -36px; opacity: 1; background: color-mix(in srgb, var(--ink) 8%, transparent); }
-.cursor.is-down .cursor__ring { width: 28px; height: 28px; margin: -14px 0 0 -14px; }
-.cursor.is-inv .cursor__dot { background: var(--inv-ink); }
-.cursor.is-inv .cursor__ring { border-color: var(--inv-ink); }
-@media (hover: hover) and (pointer: fine) {
-  .gsap-ok .cursor { display: block; }
-}
-
-/* magnetic targets keep their own transform */
-.magnetic { will-change: transform; }
-
 .gsap-ok .mood { transition: background-color 0.2s, box-shadow 0.3s; }
 
 /* footer wordmark letters live in a mask (clip only the bottom edge, keep side overhangs) */
 .gsap-ok .wordmark { clip-path: inset(-50% -10% 0 -10%); }
-.gsap-ok .wordmark span { transition: color 0.4s; }
-.gsap-ok .wordmark span:hover { transform: none; }
 
 /* loader leaves with a soft curved edge */
 @keyframes loader-out {

@@ -1,7 +1,6 @@
 (() => {
   const root = document.documentElement;
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches;
   const G = window.gsap;
   const ST = window.ScrollTrigger;
   const useGsap = !reduce && G && ST;
@@ -204,7 +203,7 @@
   const heroTl = G.timeline({ delay: introDelay, defaults: { ease: EXPO } });
   heroTl
     .to(metaBits, { y: 0, opacity: 1, duration: 1, stagger: 0.08 }, 0)
-    .to(heroChars.flat(), { yPercent: 0, rotate: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, stagger: 0.035 }, 0.1)
+    .to(heroChars.flat(), { yPercent: 0, rotate: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, stagger: 0.035, clearProps: "filter,rotate" }, 0.1)
     .to(ticks, { scale: 1, duration: 0.9, ease: "back.out(2.4)", stagger: 0.15 }, 0.5)
     .to(footBits, { y: 0, opacity: 1, duration: 1.1, stagger: 0.08 }, 0.75)
     .to(".spine__line", { scaleX: 1, duration: 2, ease: "expo.inOut" }, 0.5)
@@ -225,9 +224,9 @@
 
   /* ---------- Manifesto: scrubbed reading light ---------- */
   if (manifestoChars.length) {
-    G.set(manifestoChars, { opacity: 0.12, filter: "blur(3px)", y: 6 });
+    G.set(manifestoChars, { opacity: 0.14 });
     G.to(manifestoChars, {
-      opacity: 1, filter: "blur(0px)", y: 0, ease: "none", stagger: 0.05,
+      opacity: 1, ease: "none", stagger: 0.05,
       scrollTrigger: { trigger: manifesto, start: "top 80%", end: "bottom 45%", scrub: 0.6 },
     });
   }
@@ -327,63 +326,10 @@
   G.from(".detail-grid li", { y: 30, opacity: 0, duration: 1.1, ease: EXPO, stagger: 0.08, scrollTrigger: { trigger: ".detail-grid", start: "top 88%" } });
   G.from(".note", { opacity: 0, y: 16, duration: 1, ease: EXPO, scrollTrigger: { trigger: ".note", start: "top 92%" } });
 
-  /* ---------- Footer: wordmark rises, letters respond to the pointer ---------- */
+  /* ---------- Footer: wordmark rises ---------- */
   const wm = [...document.querySelectorAll(".wordmark span:not(.sp)")];
   G.from(wm, { yPercent: 110, duration: 1.4, ease: EXPO, stagger: 0.05, scrollTrigger: { trigger: ".wordmark", start: "top 92%" } });
   G.from(".footer__tag, .footer__top .btn", { y: 30, opacity: 0, duration: 1.1, ease: EXPO, stagger: 0.1, scrollTrigger: { trigger: ".footer", start: "top 85%" } });
-  if (finePointer) {
-    const mark = document.querySelector(".wordmark");
-    const colors = ["var(--past)", "var(--present)", "var(--future)"];
-    mark.addEventListener("pointermove", (e) => {
-      wm.forEach((s, i) => {
-        const r = s.getBoundingClientRect();
-        const d = Math.abs(e.clientX - (r.left + r.width / 2));
-        const k = Math.max(0, 1 - d / 260);
-        G.to(s, { yPercent: -18 * k, duration: 0.6, ease: "power3.out", overwrite: "auto" });
-        s.style.color = k > 0.75 ? colors[i % 3] : "";
-      });
-    });
-    mark.addEventListener("pointerleave", () => wm.forEach((s) => { G.to(s, { yPercent: 0, duration: 0.9, ease: "elastic.out(1, 0.4)" }); s.style.color = ""; }));
-  }
-
-  /* ---------- Magnetic buttons + custom cursor ---------- */
-  if (finePointer) {
-    document.querySelectorAll(".btn--lg, .dl__go, .icon-btn, .nav .btn").forEach((el) => {
-      el.classList.add("magnetic");
-      const xTo = G.quickTo(el, "x", { duration: 0.6, ease: "power3.out" });
-      const yTo = G.quickTo(el, "y", { duration: 0.6, ease: "power3.out" });
-      el.addEventListener("pointermove", (e) => {
-        const r = el.getBoundingClientRect();
-        xTo((e.clientX - r.left - r.width / 2) * 0.3);
-        yTo((e.clientY - r.top - r.height / 2) * 0.4);
-      });
-      el.addEventListener("pointerleave", () => { xTo(0); yTo(0); });
-    });
-
-    const cursor = document.createElement("div");
-    cursor.className = "cursor";
-    cursor.setAttribute("aria-hidden", "true");
-    cursor.innerHTML = '<div class="cursor__dot"></div><div class="cursor__ring"></div>';
-    document.body.appendChild(cursor);
-    const dot = cursor.firstElementChild;
-    const ring = cursor.lastElementChild;
-    const dx = G.quickTo(dot, "x", { duration: 0.12, ease: "power3.out" });
-    const dy = G.quickTo(dot, "y", { duration: 0.12, ease: "power3.out" });
-    const rx = G.quickTo(ring, "x", { duration: 0.5, ease: "power3.out" });
-    const ry = G.quickTo(ring, "y", { duration: 0.5, ease: "power3.out" });
-    G.set(cursor, { opacity: 0 });
-    addEventListener("pointermove", (e) => {
-      if (e.pointerType !== "mouse") return;
-      G.to(cursor, { opacity: 1, duration: 0.3, overwrite: "auto" });
-      dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
-      const t = e.target;
-      cursor.classList.toggle("is-hover", !!t.closest("a, button, summary, .mood"));
-      cursor.classList.toggle("is-inv", !!t.closest(".letter-sec, .footer, a.dl:hover"));
-    });
-    document.addEventListener("pointerleave", () => G.to(cursor, { opacity: 0, duration: 0.3 }));
-    addEventListener("pointerdown", () => cursor.classList.add("is-down"));
-    addEventListener("pointerup", () => cursor.classList.remove("is-down"));
-  }
 
   /* ---------- Keep triggers correct after fonts / images settle ---------- */
   document.fonts?.ready.then(() => ST.refresh());
