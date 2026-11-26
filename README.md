@@ -25,11 +25,18 @@ download/       v0.2.0 安装包与便携版（来自 F:\By Myself Demo v6）
 ```powershell
 $dist = "F:\By myself Website\.dist"
 Remove-Item $dist -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory $dist | Out-Null
-Copy-Item index.html,styles.css,script.js $dist; Copy-Item assets,download $dist -Recurse
+Copy-Item index.html,styles.css,script.js $dist; Copy-Item assets,download,fonts $dist -Recurse
 Set-Location $dist; npx wrangler@4 pages deploy . --project-name=bymyself --branch=main --commit-dirty=true
 ```
 
 注意：wrangler 4.168 的 `pages project create` 会把当前目录当成要部署的内容，并按目录名去注册 workers.dev 子域名。项目已经建好，不要再运行这个命令。
+
+## 字体（全部放在本站，不用 Google Fonts，因为它在国内被墙）
+
+- `fonts/Inter-Variable-latin.woff2`：西文正文，复制自应用。
+- `fonts/serif-sc.woff2`：Noto Serif SC 600，只保留页面用到的字，约 110 KB。**改了页面文字后要重新生成**，否则新加的字会显示成系统宋体：
+  `python -m pip install fonttools brotli`，下载 `NotoSerifSC[wght].ttf`（google/fonts 仓库 ofl/notoserifsc），再运行
+  `python tools/subset-serif.py NotoSerifSC[wght].ttf index.html fonts/serif-sc.woff2`
 
 发新版时，替换 `download/` 里的两个 exe，并修改 `index.html` 里的版本号和文件大小（搜索 `0.2.0`）。
 
