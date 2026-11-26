@@ -6,6 +6,18 @@
   const useGsap = !reduce && G && ST;
   if (useGsap) root.classList.add("gsap-ok");
 
+  /* ================= Diagnostics: open the site with ?debug ================= */
+  if (/[?&]debug(?:[=&]|$)/.test(location.search)) {
+    const v = (document.querySelector('script[src*="script.js"]') || {}).src || "";
+    const badge = document.createElement("div");
+    badge.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:999;padding:10px 14px;border-radius:10px;background:#111;color:#fff;font:13px/1.6 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:320px";
+    const ver = (v.match(/v=([0-9a-f]+)/) || [])[1] || "未带版本号";
+    const mode = reduce ? "静态版（系统设置了减少动画）" : (G && ST ? "完整动效" : "动画库没加载成功");
+    badge.innerHTML = `<b>网站诊断</b><br>版本：${ver}<br>动画模式：${mode}<br>浏览器：${navigator.userAgent.match(/(Edg|Chrome|Firefox|Safari)\/[\d.]+/g)?.slice(-1)[0] || "未知"}`;
+    addEventListener("DOMContentLoaded", () => document.body.appendChild(badge));
+    if (document.readyState !== "loading") document.body.appendChild(badge);
+  }
+
   /* ================= Theme ================= */
   const store = {
     get(k, s = localStorage) { try { return s.getItem(k); } catch { return null; } },
