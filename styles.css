@@ -226,7 +226,7 @@ code {
 .hero__foot { opacity: 0; transform: translateY(16px); transition: opacity 0.9s var(--ease) 0.45s, transform 0.9s var(--ease) 0.45s; }
 .is-ready .hero__foot { opacity: 1; transform: none; }
 
-.spine { position: relative; height: 110px; margin-top: clamp(32px, 5vh, 64px); }
+.spine { position: relative; height: 110px; margin-top: clamp(32px, 5vh, 64px); overflow: hidden; }
 .spine__line { position: absolute; left: 0; right: 0; top: 50%; height: 1.5px; background: var(--ink); transform-origin: left; transform: scaleX(0); transition: transform 1.6s var(--ease-io) 0.3s; }
 .is-ready .spine__line { transform: scaleX(1); }
 .spine__dot { position: absolute; top: 50%; border-radius: 50%; transform: translate(-50%, -50%) scale(0); transition: transform 0.7s var(--ease); }
@@ -328,7 +328,9 @@ code {
 .steps i { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--line); flex: none; }
 
 /* ---------- Sealed letter (inverted) ---------- */
-.letter-sec { background: var(--inv-bg); color: var(--inv-ink); padding: clamp(100px, 14vw, 200px) 0; }
+.letter-sec { position: relative; color: var(--inv-ink); padding: clamp(100px, 14vw, 200px) 0; }
+.letter-sec__bg { position: absolute; inset: 0; background: var(--inv-bg); z-index: 0; }
+.letter-sec__grid { position: relative; z-index: 1; }
 .letter-sec__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(48px, 7vw, 120px); align-items: center; }
 .letter-sec__body { margin-top: 32px; font-size: 17px; color: var(--inv-ink-2); max-width: 30em; }
 .envelope { position: relative; padding: 40px 32px 32px; border: 1px solid var(--inv-line); border-radius: 20px; text-align: center; }
@@ -461,6 +463,73 @@ html:not(.js) .spine__dot { transform: translate(-50%, -50%) scale(1); }
   .countdown { gap: 4px; }
   .envelope { padding: 32px 18px 24px; }
   .footer__bottom { flex-direction: column; }
+}
+
+/* ==========================================================================
+   Motion mode (GSAP + Lenis). html.motion is set before first paint when the
+   user allows motion; html.gsap-ok once the libraries actually loaded.
+   GSAP owns these properties, so CSS transitions on them are switched off.
+   ========================================================================== */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+.gsap-ok .line__in,
+.gsap-ok .hero__foot,
+.gsap-ok .spine__line,
+.gsap-ok .spine__dot,
+.gsap-ok .reveal,
+.gsap-ok .manifesto__text .w,
+.gsap-ok .rail__digits,
+.gsap-ok .progress span,
+.gsap-ok .envelope__seal,
+.gsap-ok .envelope__paper::after { transition: none !important; }
+.gsap-ok .line__in { transform: none; }
+.gsap-ok .reveal { opacity: 1; transform: none; }
+.gsap-ok .envelope__paper::after { transform: translateY(var(--veil, 100%)); }
+.gsap-ok .envelope__seal { transform: none; }
+
+/* split characters */
+.ch { display: inline-block; will-change: transform; }
+.ml { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.ml__in { display: block; will-change: transform; }
+
+/* hairlines that draw themselves */
+.gsap-ok .ledger, .gsap-ok .dl-list, .gsap-ok .faq__list { border-top-color: transparent; position: relative; }
+.draw-line { position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--ink); transform-origin: left; }
+
+/* seal ripple */
+.envelope__ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--future); opacity: 0; pointer-events: none; }
+
+/* custom cursor (fine pointers only) */
+.cursor { position: fixed; left: 0; top: 0; z-index: 120; pointer-events: none; display: none; }
+.cursor__dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--ink); }
+.cursor__ring {
+  position: absolute; left: 0; top: 0; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%;
+  border: 1px solid var(--ink); opacity: 0.35; transition: width 0.35s var(--ease), height 0.35s var(--ease), margin 0.35s var(--ease), opacity 0.3s, background-color 0.3s;
+}
+.cursor.is-hover .cursor__ring { width: 72px; height: 72px; margin: -36px 0 0 -36px; opacity: 1; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.cursor.is-down .cursor__ring { width: 28px; height: 28px; margin: -14px 0 0 -14px; }
+.cursor.is-inv .cursor__dot { background: var(--inv-ink); }
+.cursor.is-inv .cursor__ring { border-color: var(--inv-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .gsap-ok .cursor { display: block; }
+}
+
+/* magnetic targets keep their own transform */
+.magnetic { will-change: transform; }
+
+.gsap-ok .mood { transition: background-color 0.2s, box-shadow 0.3s; }
+
+/* footer wordmark letters live in a mask (clip only the bottom edge, keep side overhangs) */
+.gsap-ok .wordmark { clip-path: inset(-50% -10% 0 -10%); }
+.gsap-ok .wordmark span { transition: color 0.4s; }
+.gsap-ok .wordmark span:hover { transform: none; }
+
+/* loader leaves with a soft curved edge */
+@keyframes loader-out {
+  0% { transform: translateY(0); border-radius: 0; }
+  100% { transform: translateY(-100%); border-radius: 0 0 50% 50% / 0 0 14vh 14vh; visibility: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {

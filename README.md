@@ -25,7 +25,7 @@ download/       v0.2.0 安装包与便携版（来自 F:\By Myself Demo v6）
 ```powershell
 $dist = "F:\By myself Website\.dist"
 Remove-Item $dist -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory $dist | Out-Null
-Copy-Item index.html,styles.css,script.js $dist; Copy-Item assets,download,fonts $dist -Recurse
+Copy-Item index.html,styles.css,script.js $dist; Copy-Item assets,download,fonts,vendor $dist -Recurse
 Set-Location $dist; npx wrangler@4 pages deploy . --project-name=bymyself --branch=main --commit-dirty=true
 ```
 
@@ -41,3 +41,7 @@ Set-Location $dist; npx wrangler@4 pages deploy . --project-name=bymyself --bran
 发新版时，替换 `download/` 里的两个 exe，并修改 `index.html` 里的版本号和文件大小（搜索 `0.2.0`）。
 
 GitHub 仓库 `hqiy0831/bymyself-site` 只用来备份代码，GitHub Pages 已关闭。
+
+## 动效
+
+GSAP 3.13（含 ScrollTrigger，免费标准授权）和 Lenis 1.3（MIT），放在 `vendor/`，由本站自己托管。系统开启“减少动态效果”或这两个库加载失败时，会自动退回到 CSS 实现的轻量动画。

@@ -27,9 +27,14 @@
       if (!t) t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       d.setAttribute("data-theme", t);
       d.classList.add("js");
-      if (!seen && !matchMedia("(prefers-reduced-motion: reduce)").matches) d.classList.add("intro");
+      var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!still) d.classList.add("motion");
+      if (!seen && !still) d.classList.add("intro");
     })();
   </script>
+  <script src="vendor/gsap.min.js" defer></script>
+  <script src="vendor/ScrollTrigger.min.js" defer></script>
+  <script src="vendor/lenis.min.js" defer></script>
 </head>
 <body>
   <!-- Lucide icons (ISC) -->
@@ -247,6 +252,7 @@
 
     <!-- ================= Sealed letter ================= -->
     <section class="letter-sec" id="letter" aria-labelledby="letter-title">
+      <div class="letter-sec__bg" aria-hidden="true"></div>
       <div class="wrap letter-sec__grid">
         <div class="letter-sec__copy">
           <p class="meta-label meta-label--inv">— 写给未来的信</p>
@@ -258,7 +264,7 @@
             <p class="envelope__to">写给 30 岁的我</p>
             <p class="envelope__line"></p><p class="envelope__line"></p><p class="envelope__line envelope__line--short"></p>
           </div>
-          <div class="envelope__seal"><svg class="icon"><use href="#i-lock"/></svg></div>
+          <div class="envelope__seal"><span class="envelope__ring"></span><svg class="icon"><use href="#i-lock"/></svg></div>
           <div class="countdown" id="countdown" data-unlock="2030-01-01T00:00:00">
             <div><strong data-k="d">—</strong><span>天</span></div>
             <div><strong data-k="h">—</strong><span>时</span></div>
