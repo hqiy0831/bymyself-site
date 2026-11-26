@@ -45,3 +45,12 @@ GitHub 仓库 `hqiy0831/bymyself-site` 只用来备份代码，GitHub Pages 已�
 ## 动效
 
 GSAP 3.13（含 ScrollTrigger，免费标准授权）和 Lenis 1.3（MIT），放在 `vendor/`，由本站自己托管。系统开启“减少动态效果”或这两个库加载失败时，会自动退回到 CSS 实现的轻量动画。
+
+## 应用界面截图（assets/app/）
+
+官网“真实界面”区的 12 张图（6 个页面 × 浅色/深色），都是用应用的浏览器 mock 模式截的真实界面，内容是虚构的示例数据。应用界面更新后可以重拍：
+
+1. 在 `F:\By myself Orca` 运行 `pnpm dev --port 5190 --strictPort`
+2. 运行 `node tools/app-screenshots.cjs "F:/By myself Orca/node_modules/.pnpm/playwright@1.65.1/node_modules/playwright" assets/app tools/app-demo-seed.js`
+
+`app-demo-seed.js` 会先清空 mock 数据，再写入示例数据。它只作用于 Playwright 开的临时浏览器，不会碰你真实的日记。

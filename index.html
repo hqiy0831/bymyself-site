@@ -83,6 +83,7 @@
       </a>
       <nav aria-label="主导航">
         <ul class="nav__links">
+          <li><a href="#app">界面</a></li>
           <li><a href="#story">故事</a></li>
           <li><a href="#letter">封存信</a></li>
           <li><a href="#privacy">隐私</a></li>
@@ -119,7 +120,7 @@
           <p class="hero__lede">一本保存在你自己电脑上的人生日记。<br>每天一篇，几年后，它会是你最珍贵的东西。</p>
           <div class="hero__cta">
             <a class="btn btn--ink btn--lg" href="#download"><svg class="icon"><use href="#i-download"/></svg>免费下载 Windows 版</a>
-            <a class="btn btn--line btn--lg" href="#story">往下看<svg class="icon"><use href="#i-arrow-down"/></svg></a>
+            <a class="btn btn--line btn--lg" href="#app">看看界面<svg class="icon"><use href="#i-arrow-down"/></svg></a>
           </div>
         </div>
       </div>
@@ -130,6 +131,75 @@
         <span class="spine__dot spine__dot--past"><em>过去</em></span>
         <span class="spine__dot spine__dot--present"><em>现在</em></span>
         <span class="spine__dot spine__dot--future"><em>未来</em></span>
+      </div>
+    </section>
+
+    <!-- ================= Showcase: real app screens ================= -->
+    <section class="showcase" id="app" aria-labelledby="app-title">
+      <div class="wrap">
+        <div class="showcase__head">
+          <div>
+            <p class="meta-label">— 真实界面</p>
+            <h2 class="display-2" id="app-title">这就是<br>By Myself。</h2>
+          </div>
+          <p class="showcase__sub">以下都是应用里的真实画面（内容为示例数据）。浅色、深色都有，跟随你的系统。</p>
+        </div>
+        <div class="sc-tabs" role="tablist" aria-label="应用界面">
+            <button class="sc-tab is-on" type="button" role="tab" id="sc-tab-present" aria-controls="sc-panel-present" aria-selected="true" tabindex="0"><span class="sc-tab__no">01</span>今日日记<i class="sc-tab__bar" aria-hidden="true"></i></button>
+            <button class="sc-tab" type="button" role="tab" id="sc-tab-past" aria-controls="sc-panel-past" aria-selected="false" tabindex="-1"><span class="sc-tab__no">02</span>过去<i class="sc-tab__bar" aria-hidden="true"></i></button>
+            <button class="sc-tab" type="button" role="tab" id="sc-tab-future" aria-controls="sc-panel-future" aria-selected="false" tabindex="-1"><span class="sc-tab__no">03</span>未来<i class="sc-tab__bar" aria-hidden="true"></i></button>
+            <button class="sc-tab" type="button" role="tab" id="sc-tab-timeline" aria-controls="sc-panel-timeline" aria-selected="false" tabindex="-1"><span class="sc-tab__no">04</span>人生时间线<i class="sc-tab__bar" aria-hidden="true"></i></button>
+            <button class="sc-tab" type="button" role="tab" id="sc-tab-review" aria-controls="sc-panel-review" aria-selected="false" tabindex="-1"><span class="sc-tab__no">05</span>定期回顾<i class="sc-tab__bar" aria-hidden="true"></i></button>
+            <button class="sc-tab" type="button" role="tab" id="sc-tab-search" aria-controls="sc-panel-search" aria-selected="false" tabindex="-1"><span class="sc-tab__no">06</span>全文搜索<i class="sc-tab__bar" aria-hidden="true"></i></button>
+        </div>
+        <div class="sc-stage">
+          <div class="sc-window">
+            <div class="sc-titlebar" aria-hidden="true">
+              <span class="sc-titlebar__app"><img src="assets/icon.svg" alt="" width="16" height="16">By Myself</span>
+              <span class="sc-titlebar__ctl"><i class="min"></i><i class="max"></i><i class="cls"></i></span>
+            </div>
+            <div class="sc-screens">
+              <figure class="sc-shot is-on" role="tabpanel" id="sc-panel-present" aria-labelledby="sc-tab-present">
+                <img class="sc-img sc-img--light" src="assets/app/present-light.jpg" alt="By Myself 应用界面：今日日记" width="1920" height="1200" decoding="async">
+                <img class="sc-img sc-img--dark" src="assets/app/present-dark.jpg" alt="By Myself 应用界面（深色）：今日日记" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">每天一篇，打开就能写，边写边自动保存。右边随手记下心情、想法和带照片的瞬间。</figcaption>
+              </figure>
+              <figure class="sc-shot" role="tabpanel" id="sc-panel-past" aria-labelledby="sc-tab-past" hidden>
+                <img class="sc-img sc-img--light" src="assets/app/past-light.jpg" alt="By Myself 应用界面：过去" width="1920" height="1200" decoding="async" loading="lazy">
+                <img class="sc-img sc-img--dark" src="assets/app/past-dark.jpg" alt="By Myself 应用界面（深色）：过去" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">回忆、经历、重要的决定，配上当时的照片。几年后回头看，那时的自己就在这里。</figcaption>
+              </figure>
+              <figure class="sc-shot" role="tabpanel" id="sc-panel-future" aria-labelledby="sc-tab-future" hidden>
+                <img class="sc-img sc-img--light" src="assets/app/future-light.jpg" alt="By Myself 应用界面：未来" width="1920" height="1200" decoding="async" loading="lazy">
+                <img class="sc-img sc-img--dark" src="assets/app/future-dark.jpg" alt="By Myself 应用界面（深色）：未来" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">梦想拆成目标，目标拆成步骤，进度一目了然。写给未来的信封存到开启日，到那天之前谁也打不开。</figcaption>
+              </figure>
+              <figure class="sc-shot" role="tabpanel" id="sc-panel-timeline" aria-labelledby="sc-tab-timeline" hidden>
+                <img class="sc-img sc-img--light" src="assets/app/timeline-light.jpg" alt="By Myself 应用界面：人生时间线" width="1920" height="1200" decoding="async" loading="lazy">
+                <img class="sc-img sc-img--dark" src="assets/app/timeline-dark.jpg" alt="By Myself 应用界面（深色）：人生时间线" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">过去、现在、未来串成同一条线。右边按年份跳转，虚线是还没到来的计划。</figcaption>
+              </figure>
+              <figure class="sc-shot" role="tabpanel" id="sc-panel-review" aria-labelledby="sc-tab-review" hidden>
+                <img class="sc-img sc-img--light" src="assets/app/review-light.jpg" alt="By Myself 应用界面：定期回顾" width="1920" height="1200" decoding="async" loading="lazy">
+                <img class="sc-img sc-img--dark" src="assets/app/review-dark.jpg" alt="By Myself 应用界面（深色）：定期回顾" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">每周、每月、每年自动汇总：写了多少、心情怎样、哪些值得回看。</figcaption>
+              </figure>
+              <figure class="sc-shot" role="tabpanel" id="sc-panel-search" aria-labelledby="sc-tab-search" hidden>
+                <img class="sc-img sc-img--light" src="assets/app/search-light.jpg" alt="By Myself 应用界面：全文搜索" width="1920" height="1200" decoding="async" loading="lazy">
+                <img class="sc-img sc-img--dark" src="assets/app/search-dark.jpg" alt="By Myself 应用界面（深色）：全文搜索" width="1920" height="1200" decoding="async" loading="lazy">
+                <figcaption class="visually-hidden">中文也能搜。输入“江边”，几年里所有提到它的日记、瞬间和信都在这里。</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div class="sc-caps" aria-hidden="true">
+          <p class="sc-cap is-on" data-cap="present"><b>今日日记</b>每天一篇，打开就能写，边写边自动保存。右边随手记下心情、想法和带照片的瞬间。</p>
+          <p class="sc-cap" data-cap="past"><b>过去</b>回忆、经历、重要的决定，配上当时的照片。几年后回头看，那时的自己就在这里。</p>
+          <p class="sc-cap" data-cap="future"><b>未来</b>梦想拆成目标，目标拆成步骤，进度一目了然。写给未来的信封存到开启日，到那天之前谁也打不开。</p>
+          <p class="sc-cap" data-cap="timeline"><b>人生时间线</b>过去、现在、未来串成同一条线。右边按年份跳转，虚线是还没到来的计划。</p>
+          <p class="sc-cap" data-cap="review"><b>定期回顾</b>每周、每月、每年自动汇总：写了多少、心情怎样、哪些值得回看。</p>
+          <p class="sc-cap" data-cap="search"><b>全文搜索</b>中文也能搜。输入“江边”，几年里所有提到它的日记、瞬间和信都在这里。</p>
+        </div>
       </div>
     </section>
 

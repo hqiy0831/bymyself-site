@@ -90,6 +90,53 @@
   const y = document.getElementById("year");
   if (y) y.textContent = String(new Date().getFullYear());
 
+  /* ================= Showcase tabs (shared) ================= */
+  const showcase = document.querySelector(".showcase");
+  if (showcase) {
+    const tabs = [...showcase.querySelectorAll(".sc-tab")];
+    const shots = [...showcase.querySelectorAll(".sc-shot")];
+    const caps = [...showcase.querySelectorAll(".sc-cap")];
+    const DUR = 6000;
+    showcase.style.setProperty("--sc-dur", `${DUR}ms`);
+    let cur = 0, timer = null, inView = false, hovering = false, userPicked = false;
+    const show = (i, focus) => {
+      cur = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => { const on = k === cur; t.classList.toggle("is-on", on); t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
+      shots.forEach((s, k) => { const on = k === cur; s.classList.toggle("is-on", on); s.hidden = !on; });
+      caps.forEach((c, k) => c.classList.toggle("is-on", k === cur));
+      // restart the progress bar animation on the active tab
+      const bar = tabs[cur].querySelector(".sc-tab__bar");
+      bar.style.animation = "none"; void bar.offsetWidth; bar.style.animation = "";
+      if (focus) tabs[cur].focus();
+      // preload the next screen so the crossfade never shows a blank frame
+      const next = shots[(cur + 1) % shots.length];
+      next.querySelectorAll("img").forEach((im) => { im.loading = "eager"; });
+    };
+    const stop = () => { clearInterval(timer); timer = null; showcase.classList.remove("is-playing"); };
+    const play = () => {
+      stop();
+      if (reduce || userPicked || !inView) return;
+      showcase.classList.add("is-playing");
+      timer = setInterval(() => { if (!hovering) show(cur + 1); }, DUR);
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => { userPicked = true; stop(); show(i); });
+      t.addEventListener("keydown", (e) => {
+        const k = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (k) { e.preventDefault(); userPicked = true; stop(); show(cur + k, true); }
+        if (e.key === "Home") { e.preventDefault(); userPicked = true; stop(); show(0, true); }
+        if (e.key === "End") { e.preventDefault(); userPicked = true; stop(); show(tabs.length - 1, true); }
+      });
+    });
+    const stage = showcase.querySelector(".sc-stage");
+    stage.addEventListener("pointerenter", () => { hovering = true; showcase.classList.add("is-paused"); });
+    stage.addEventListener("pointerleave", () => { hovering = false; showcase.classList.remove("is-paused"); });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => { inView = e.isIntersecting; if (inView) { if (!timer) play(); } else stop(); }, { threshold: 0.35 }).observe(stage);
+    }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else if (inView) play(); });
+  }
+
   /* ================= Story rail (shared) ================= */
   const chapters = [...document.querySelectorAll(".chapter")];
   const digits = document.getElementById("rail-digits");
@@ -221,6 +268,13 @@
   G.to(".hero__foot", { y: -60, opacity: 0, ease: "none", scrollTrigger: { trigger: ".hero", start: "40% top", end: "bottom top", scrub: true } });
   G.to(".spine__dot--past", { x: -60, ease: "none", scrollTrigger: { trigger: ".spine", start: "top 70%", end: "bottom top", scrub: true } });
   G.to(".spine__dot--future", { x: 60, ease: "none", scrollTrigger: { trigger: ".spine", start: "top 70%", end: "bottom top", scrub: true } });
+
+  /* ---------- Showcase: the window settles flat as it arrives ---------- */
+  G.fromTo(".sc-window",
+    { rotateX: 16, scale: 0.92, y: 40 },
+    { rotateX: 0, scale: 1, y: 0, ease: "none", scrollTrigger: { trigger: ".sc-stage", start: "top 95%", end: "top 30%", scrub: 0.5 } });
+  G.from(".sc-tab", { y: 20, opacity: 0, duration: 0.9, ease: EXPO, stagger: 0.06, scrollTrigger: { trigger: ".sc-tabs", start: "top 90%" } });
+  G.from(".showcase__sub, .sc-caps", { y: 24, opacity: 0, duration: 1.1, ease: EXPO, scrollTrigger: { trigger: ".showcase__head", start: "top 85%" } });
 
   /* ---------- Manifesto: scrubbed reading light ---------- */
   if (manifestoChars.length) {
