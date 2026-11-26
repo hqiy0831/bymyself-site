@@ -23,7 +23,7 @@ download/       v0.2.0 安装包与便携版（来自 F:\By Myself Demo v6）
 一条命令：
 
 ```powershell
-pwsh -NoProfile -File "F:\By myself Website	ools\deploy.ps1"
+pwsh -NoProfile -File "F:\By myself Website\tools\deploy.ps1"
 ```
 
 脚本会做这几件事：
