@@ -1,67 +1,139 @@
 (() => {
   const root = document.documentElement;
-  root.classList.add("js");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* Theme: system by default, remembered once toggled. */
+  /* ---------- Theme ---------- */
   const store = {
-    get() { try { return localStorage.getItem("bm-theme"); } catch { return null; } },
-    set(v) { try { localStorage.setItem("bm-theme", v); } catch { /* ignore */ } },
+    get(k, s = localStorage) { try { return s.getItem(k); } catch { return null; } },
+    set(k, v, s = localStorage) { try { s.setItem(k, v); } catch { /* ignore */ } },
   };
-  const media = window.matchMedia("(prefers-color-scheme: dark)");
-  const apply = (t) => {
-    root.dataset.theme = t;
-    document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
-      m.setAttribute("content", t === "dark" ? "#111113" : "#f7f5f1");
-      m.removeAttribute("media");
-    });
-  };
-  apply(store.get() || (media.matches ? "dark" : "light"));
-  media.addEventListener("change", (e) => { if (!store.get()) apply(e.matches ? "dark" : "light"); });
+  const setThemeColor = (t) => document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+    m.setAttribute("content", t === "dark" ? "#141413" : "#f2efe8");
+    m.removeAttribute("media");
+  });
+  setThemeColor(root.dataset.theme);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+    if (store.get("bm-theme")) return;
+    root.dataset.theme = e.matches ? "dark" : "light";
+    setThemeColor(root.dataset.theme);
+  });
   document.getElementById("theme-toggle")?.addEventListener("click", () => {
     const next = root.dataset.theme === "dark" ? "light" : "dark";
-    store.set(next);
-    apply(next);
+    root.dataset.theme = next;
+    store.set("bm-theme", next);
+    setThemeColor(next);
   });
 
-  /* Nav border after scrolling. */
-  const nav = document.querySelector(".nav");
-  const onScroll = () => nav.classList.toggle("is-scrolled", window.scrollY > 8);
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+  /* ---------- Intro ---------- */
+  const intro = root.classList.contains("intro");
+  if (intro) {
+    store.set("bm-intro", "1", sessionStorage);
+    setTimeout(() => root.classList.add("is-ready"), 2100);
+    setTimeout(() => root.classList.remove("intro"), 2900);
+  } else {
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add("is-ready")));
+  }
 
-  /* Reveal on scroll. */
+  /* ---------- Manifesto: split into characters ---------- */
+  const manifesto = document.getElementById("manifesto");
+  let chars = [];
+  if (manifesto && !reduce) {
+    const text = manifesto.textContent;
+    manifesto.setAttribute("aria-label", text);
+    manifesto.textContent = "";
+    for (const ch of text) {
+      const s = document.createElement("span");
+      s.className = "w";
+      s.setAttribute("aria-hidden", "true");
+      s.textContent = ch;
+      manifesto.appendChild(s);
+    }
+    chars = [...manifesto.children];
+  }
+
+  /* ---------- Story rail ---------- */
+  const chapters = [...document.querySelectorAll(".chapter")];
+  const digits = document.getElementById("rail-digits");
+  const names = [...document.querySelectorAll("#rail-names span")];
+  const dots = [...document.querySelectorAll(".rail__dot")];
+  const fill = document.getElementById("rail-fill");
+  const story = document.getElementById("story");
+  let active = -1;
+  const setChapter = (i) => {
+    if (i === active) return;
+    active = i;
+    if (digits) digits.style.transform = `translateY(${-i}em)`;
+    names.forEach((n, k) => { n.classList.toggle("is-on", k === i); n.classList.toggle("is-past", k < i); });
+    dots.forEach((d, k) => d.classList.toggle("is-on", k <= i));
+  };
+  setChapter(0);
+
+  /* ---------- Scroll loop ---------- */
+  const nav = document.querySelector(".nav");
+  let lastY = scrollY;
+  let ticking = false;
+  const onScroll = () => {
+    ticking = false;
+    const y = scrollY;
+    const vh = innerHeight;
+    nav.classList.toggle("is-scrolled", y > 16);
+    nav.classList.toggle("is-hidden", y > lastY && y > vh * 0.8);
+    lastY = y;
+
+    if (chars.length) {
+      const r = manifesto.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (vh * 0.85 - r.top) / (r.height + vh * 0.35)));
+      const lit = Math.round(p * chars.length);
+      for (let i = 0; i < chars.length; i++) chars[i].classList.toggle("is-lit", i < lit);
+    }
+
+    if (story && chapters.length) {
+      let idx = 0;
+      chapters.forEach((c, i) => { if (c.getBoundingClientRect().top < vh * 0.55) idx = i; });
+      setChapter(idx);
+      const r = story.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (vh * 0.5 - r.top) / (r.height - vh * 0.6)));
+      if (fill) {
+        fill.style.height = `${p * 100}%`;
+        fill.parentElement.style.setProperty("--fill", `${p * 100}%`);
+      }
+    }
+  };
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  addEventListener("resize", onScroll);
+  onScroll();
+
+  /* ---------- Reveal ---------- */
   const items = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+  if ("IntersectionObserver" in window && !reduce) {
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px -10% 0px", threshold: 0.1 });
     items.forEach((el) => io.observe(el));
   } else {
     items.forEach((el) => el.classList.add("is-in"));
   }
 
-  /* Mood picker demo. */
+  /* ---------- Mood demo ---------- */
   const moods = document.querySelectorAll(".mood");
-  moods.forEach((btn) => btn.addEventListener("click", () => {
-    moods.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
-  }));
+  moods.forEach((b) => b.addEventListener("click", () => moods.forEach((m) => m.setAttribute("aria-pressed", String(m === b)))));
 
-  /* Sealed-letter countdown. */
+  /* ---------- Countdown ---------- */
   const cd = document.getElementById("countdown");
   if (cd) {
     const target = new Date(cd.dataset.unlock).getTime();
-    const out = { d: cd.querySelector('[data-k="d"]'), h: cd.querySelector('[data-k="h"]'), m: cd.querySelector('[data-k="m"]') };
+    const out = {};
+    cd.querySelectorAll("[data-k]").forEach((el) => { out[el.dataset.k] = el; });
+    const pad = (n) => String(n).padStart(2, "0");
     const tick = () => {
-      const left = Math.max(0, target - Date.now());
-      const mins = Math.floor(left / 60000);
-      out.d.textContent = Math.floor(mins / 1440).toLocaleString("zh-CN");
-      out.h.textContent = String(Math.floor((mins % 1440) / 60)).padStart(2, "0");
-      out.m.textContent = String(mins % 60).padStart(2, "0");
+      const s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+      out.d.textContent = Math.floor(s / 86400).toLocaleString("zh-CN");
+      out.h.textContent = pad(Math.floor((s % 86400) / 3600));
+      out.m.textContent = pad(Math.floor((s % 3600) / 60));
+      out.s.textContent = pad(s % 60);
     };
     tick();
-    setInterval(tick, 30000);
+    setInterval(tick, 1000);
   }
 
   const y = document.getElementById("year");
