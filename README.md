@@ -20,14 +20,19 @@ download/       v0.2.0 安装包与便携版（来自 F:\By Myself Demo v6）
 
 ## 发布 / 更新
 
-只上传网站文件。不要把整个仓库目录直接交给 wrangler：它会把 `.git` 和 README 一起传上去。
+一条命令：
 
 ```powershell
-$dist = "F:\By myself Website\.dist"
-Remove-Item $dist -Recurse -Force -ErrorAction SilentlyContinue; New-Item -ItemType Directory $dist | Out-Null
-Copy-Item index.html,styles.css,script.js $dist; Copy-Item assets,download,fonts,vendor $dist -Recurse
-Set-Location $dist; npx wrangler@4 pages deploy . --project-name=bymyself --branch=main --commit-dirty=true
+pwsh -NoProfile -File "F:\By myself Website	ools\deploy.ps1"
 ```
+
+脚本会做这几件事：
+- 只把网站文件复制到 `.dist`，不会带上 `.git` 和 README；
+- 给 `styles.css`、`script.js` 和字体的地址加上按文件内容算出的 `?v=` 版本号；
+- 写入 `_headers`：HTML 每次都重新检查，带版本号的文件长期缓存；
+- 部署到 Cloudflare Pages。
+
+为什么要加版本号：Cloudflare 默认让浏览器把 CSS、JS 缓存 4 小时。不加版本号的话，改版后老访客会拿到"新 HTML + 旧 CSS"，页面会乱掉（2026-11-26 遇到过一次）。
 
 注意：wrangler 4.168 的 `pages project create` 会把当前目录当成要部署的内容，并按目录名去注册 workers.dev 子域名。项目已经建好，不要再运行这个命令。
 
